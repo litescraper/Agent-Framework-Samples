@@ -136,6 +136,23 @@ AZURE_OPENAI_API_VERSION=2025-04-01-preview
 Tvly_API_KEY=<your-tavily-key>
 ```
 
+### Optional web search provider
+
+Unset or empty base URL overrides keep the provider default. Custom path
+prefixes and trailing slashes are supported.
+
+Support any Serper.dev-compatible endpoint (like litescrape.com, serpbase.dev, serpensapi.org, and others)
+
+To use Serper-compatible Google search, set `SEARCH_PROVIDER=serper` and
+`SERPER_API_KEY`. `SERPER_BASE_URL` defaults to `https://google.serper.dev`;
+requests append `/search` and use `X-API-KEY` authentication.
+
+Leaving `SEARCH_PROVIDER` unset retains Tavily. The alternate provider does
+not need `Tvly_API_KEY`, but the existing Azure/model configuration is still
+required to run the workflow. It supplies snippets, not crawled page contents,
+Tavily relevance scores or synthesized answers. Both accepted `search_depth`
+values use the same snippet search; `advanced` does not enable a deeper crawl.
+
 Optional configuration (enable AI generation):
 ```env
 # FLUX Image Generation

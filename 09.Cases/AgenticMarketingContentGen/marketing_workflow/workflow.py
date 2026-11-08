@@ -1,6 +1,7 @@
 """High level orchestration for the agentic marketing workflow."""
 
 import asyncio
+import os
 import sys
 from dataclasses import dataclass
 from datetime import datetime
@@ -63,8 +64,15 @@ class AgenticMarketingWorkflow:
         self._config = config or MarketingWorkflowConfig()
         self._packaging_tools = PackagingTools(base_output_dir=Path(self._config.output_dir))
         
-        # Initialize Tavily search tools for research
-        self._tavily_tools = TavilySearchTools()
+        # Keep Tavily as the default; alternate providers are opt-in.
+        search_provider = os.getenv("SEARCH_PROVIDER", "tavily")
+        if search_provider == "serper":
+            from .serper_search import SerperSearchTools
+            self._tavily_tools = SerperSearchTools()
+        elif search_provider == "tavily":
+            self._tavily_tools = TavilySearchTools()
+        else:
+            raise ValueError("Unsupported SEARCH_PROVIDER")
         
         # Initialize image tools based on configuration (output_dir set at runtime)
         self._flux_image_tools: Optional[FluxImageGenerationTools] = None
