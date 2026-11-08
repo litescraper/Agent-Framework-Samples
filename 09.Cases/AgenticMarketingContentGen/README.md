@@ -136,6 +136,22 @@ AZURE_OPENAI_API_VERSION=2025-04-01-preview
 Tvly_API_KEY=<your-tavily-key>
 ```
 
+### Optional web search provider
+
+Unset or empty base URL overrides keep the provider default. Custom path
+prefixes and trailing slashes are supported.
+
+To use native Google search, set `SEARCH_PROVIDER=litescrape` and
+`LITESCRAPE_API_KEY`. `LITESCRAPE_BASE_URL` defaults to
+`https://api.litescrape.com`; requests use `GET /api/google/search` with bearer
+authentication.
+
+Leaving `SEARCH_PROVIDER` unset retains Tavily. The alternate provider does
+not need `Tvly_API_KEY`, but the existing Azure/model configuration is still
+required to run the workflow. It supplies snippets, not crawled page contents,
+Tavily relevance scores or synthesized answers. Both accepted `search_depth`
+values use the same snippet search; `advanced` does not enable a deeper crawl.
+
 Optional configuration (enable AI generation):
 ```env
 # FLUX Image Generation
